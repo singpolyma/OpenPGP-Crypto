@@ -41,20 +41,7 @@ fingerprint p
 	      | otherwise = s
 
 find_key :: OpenPGP.Message -> String -> Maybe OpenPGP.Packet
-find_key (OpenPGP.Message (x@(OpenPGP.PublicKeyPacket {}):xs)) keyid =
-	find_key_ x xs keyid
-find_key (OpenPGP.Message (x@(OpenPGP.SecretKeyPacket {}):xs)) keyid =
-	find_key_ x xs keyid
-find_key (OpenPGP.Message (_:xs)) keyid =
-	find_key (OpenPGP.Message xs) keyid
-find_key _ _ = Nothing
-
-find_key_ :: OpenPGP.Packet -> [OpenPGP.Packet] -> String -> Maybe OpenPGP.Packet
-find_key_ x xs keyid
-	| thisid == keyid = Just x
-	| otherwise = find_key (OpenPGP.Message xs) keyid
-	where
-	thisid = reverse $ take (length keyid) (reverse (fingerprint x))
+find_key = OpenPGP.find_key fingerprint
 
 keyfield_as_octets :: OpenPGP.Packet -> Char -> [Word8]
 keyfield_as_octets k f =
