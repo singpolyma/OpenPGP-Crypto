@@ -10,7 +10,6 @@ import Numeric
 import Data.Word
 import Data.Char
 import Data.List (find)
-import Data.Map ((!))
 import qualified Data.ByteString.Lazy as LZ
 import qualified Data.ByteString.Lazy.UTF8 as LZ (fromString)
 
@@ -59,8 +58,9 @@ find_key_ x xs keyid
 
 keyfield_as_octets :: OpenPGP.Packet -> Char -> [Word8]
 keyfield_as_octets k f =
-	LZ.unpack $ LZ.drop 2 (encode (k' ! f))
-	where k' = OpenPGP.key k
+	LZ.unpack $ LZ.drop 2 (encode fld)
+	where
+	Just fld = lookup f (OpenPGP.key k)
 
 -- http://tools.ietf.org/html/rfc3447#page-43
 emsa_pkcs1_v1_5_hash_padding :: OpenPGP.HashAlgorithm -> [Word8]

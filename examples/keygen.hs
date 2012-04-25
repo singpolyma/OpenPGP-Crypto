@@ -1,5 +1,4 @@
 import System.Time (getClockTime, ClockTime(..))
-import qualified Data.Map as Map
 import qualified Data.ByteString.Lazy as LZ
 
 import Data.Binary
@@ -21,7 +20,7 @@ main = do
 		OpenPGP.version = 4,
 		OpenPGP.timestamp = fromIntegral t,
 		OpenPGP.key_algorithm = OpenPGP.RSA,
-		OpenPGP.key = Map.fromList $ map (second OpenPGP.MPI)
+		OpenPGP.key = map (second OpenPGP.MPI)
 			[('n', rsaN nkey), ('e', rsaE nkey),
 			('d', rsaD nkey), ('p', rsaP nkey), ('q', rsaQ nkey),
 			('u', fst $ extEuclGcd (rsaP nkey) (rsaQ nkey))],
