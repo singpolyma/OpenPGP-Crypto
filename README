@@ -1,18 +1,9 @@
-This is an OpenPGP library inspired by my work on OpenPGP libraries in
-Ruby <https://github.com/singpolyma/openpgp>,
-PHP <http://github.com/singpolyma/openpgp-php>,
-and Python <https://github.com/singpolyma/OpenPGP-Python>.
-
-It defines types to represent OpenPGP messages as a series of packets
-and then defines instances of Data.Binary for each to facilitate
-encoding/decoding.
-
-There is also a wrapper around <http://hackage.haskell.org/package/Crypto>
+This is a wrapper around <http://hackage.haskell.org/package/Crypto>
 that currently does fingerprint generation, signature generation, and
 signature verification (for RSA keys only).
 
-It is intended that you use qualified imports with this library.  If importing
-both modules, something like this will do:
+It is indended to be used with <http://hackage.haskell.org/openpgp>
 
-> import qualified Data.OpenPGP as OpenPGP
+It is intended that you use qualified imports with this library.
+
 > import qualified Data.OpenPGP.Crypto as OpenPGP
