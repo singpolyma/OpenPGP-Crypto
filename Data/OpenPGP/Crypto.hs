@@ -80,7 +80,7 @@ verify :: OpenPGP.Message    -- ^ Keys that may have made the signature
 verify keys message sigidx =
 	encoded == RSA.encrypt (n, e) raw_sig
 	where
-	raw_sig = LZ.unpack $ LZ.drop 2 $ encode (OpenPGP.signature sig)
+	raw_sig = LZ.unpack $ LZ.drop 2 $ encode (head $ OpenPGP.signature sig)
 	encoded = emsa_pkcs1_v1_5_encode signature_over
 		(length n) (OpenPGP.hash_algorithm sig)
 	signature_over = LZ.unpack $ dta `LZ.append` OpenPGP.trailer sig
@@ -102,7 +102,7 @@ sign keys message hsh keyid timestamp =
 	-- WARNING: this style of update is unsafe on most fields
 	-- it is safe on signature and hash_head, though
 	sig {
-		OpenPGP.signature = OpenPGP.MPI $ toNum final,
+		OpenPGP.signature = [OpenPGP.MPI $ toNum final],
 		OpenPGP.hash_head = toNum $ take 2 final
 	}
 	where
