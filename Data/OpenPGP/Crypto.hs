@@ -103,7 +103,7 @@ sign keys message hsh keyid timestamp =
 	-- it is safe on signature and hash_head, though
 	sig {
 		OpenPGP.signature = [OpenPGP.MPI $ toNum final],
-		OpenPGP.hash_head = toNum $ take 2 final
+		OpenPGP.hash_head = toNum $ take 2 encoded
 	}
 	where
 	-- toNum has explicit param so that it can remain polymorphic
