@@ -14,7 +14,7 @@ main = do
 	time <- getClockTime
 	let TOD t _ = time
 
-	nkey <- generateRSAKey' 1042 65537
+	nkey <- generateRSAKey' 1024 65537
 
 	let secretKey = OpenPGP.SecretKeyPacket {
 		OpenPGP.version = 4,
