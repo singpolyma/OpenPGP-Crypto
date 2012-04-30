@@ -78,6 +78,7 @@ verify :: OpenPGP.Message    -- ^ Keys that may have made the signature
           -> Int             -- ^ Index of signature to verify (0th, 1st, etc)
           -> Bool
 verify keys message sigidx =
+	-- TODO: this is NOT SAFE.  Use something like <http://hackage.haskell.org/packages/archive/crypto-api/0.10.1/doc/html/Crypto-Classes.html#v:constTimeEq>
 	encoded == RSA.encrypt (n, e) raw_sig
 	where
 	raw_sig = LZ.unpack $ LZ.drop 2 $ encode (head $ OpenPGP.signature sig)
