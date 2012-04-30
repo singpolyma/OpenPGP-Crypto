@@ -8,8 +8,9 @@ module Data.OpenPGP.Crypto (sign, verify, fingerprint) where
 
 import Numeric
 import Data.Word
+import Data.Bits
 import Data.Char
-import Data.List (find)
+import Data.List (find,foldl')
 import qualified Data.ByteString.Lazy as LZ
 import qualified Data.ByteString.Lazy.UTF8 as LZ (fromString)
 
@@ -49,6 +50,11 @@ keyfield_as_octets k f =
 	where
 	Just fld = lookup f (OpenPGP.key k)
 
+constTimeEq :: [Word8] -> [Word8] -> Bool
+constTimeEq xs ys
+	| length xs /= length ys = False
+	| otherwise = 0 == foldl' (\r (x,y) -> r .|. (x `xor` y)) 0 (zip xs ys)
+
 -- http://tools.ietf.org/html/rfc3447#page-43
 emsa_pkcs1_v1_5_hash_padding :: OpenPGP.HashAlgorithm -> [Word8]
 emsa_pkcs1_v1_5_hash_padding OpenPGP.MD5 = [0x30, 0x20, 0x30, 0x0c, 0x06, 0x08, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x02, 0x05, 0x05, 0x00, 0x04, 0x10]
@@ -78,8 +84,7 @@ verify :: OpenPGP.Message    -- ^ Keys that may have made the signature
           -> Int             -- ^ Index of signature to verify (0th, 1st, etc)
           -> Bool
 verify keys message sigidx =
-	-- TODO: this is NOT SAFE.  Use something like <http://hackage.haskell.org/packages/archive/crypto-api/0.10.1/doc/html/Crypto-Classes.html#v:constTimeEq>
-	encoded == RSA.encrypt (n, e) raw_sig
+	encoded `constTimeEq` RSA.encrypt (n, e) raw_sig
 	where
 	raw_sig = LZ.unpack $ LZ.drop 2 $ encode (head $ OpenPGP.signature sig)
 	encoded = emsa_pkcs1_v1_5_encode signature_over
