@@ -18,7 +18,7 @@ description:
         that currently does fingerprint generation, signature generation, and
         signature verification (for RSA keys only).
         .
-        It is indended to be used with <http://hackage.haskell.org/openpgp>
+        It is indended to be used with <http://hackage.haskell.org/package/openpgp>
         .
         It is intended that you use qualified imports with this library.
         .
