@@ -47,7 +47,7 @@ library
                 bytestring,
                 utf8-string,
                 binary,
-                openpgp,
+                openpgp <= 0.5,
                 Crypto
 
 test-suite tests
@@ -59,7 +59,7 @@ test-suite tests
                 bytestring,
                 utf8-string,
                 binary,
-                openpgp,
+                openpgp <= 0.5,
                 Crypto,
                 HUnit,
                 QuickCheck >= 2.4.1.1,
