@@ -95,7 +95,17 @@ verify keys message sigidx =
         Just issuer = OpenPGP.signature_issuer sig
         sig = sigs !! sigidx
         (sigs, (OpenPGP.LiteralDataPacket {OpenPGP.content = dta}):_) =
-                OpenPGP.signatures_and_data message
+                signatures_and_data message
+
+-- | Extract all signature and data packets from a 'Message'
+signatures_and_data :: OpenPGP.Message -> ([OpenPGP.Packet], [OpenPGP.Packet])
+signatures_and_data (OpenPGP.Message ((OpenPGP.CompressedDataPacket {OpenPGP.message = m}):_)) =
+        signatures_and_data m
+signatures_and_data (OpenPGP.Message lst) =
+        (filter OpenPGP.isSignaturePacket lst, filter isDta lst)
+        where
+        isDta (OpenPGP.LiteralDataPacket {}) = True
+        isDta _                              = False
 
 -- | Sign data or key/userID pair.  Only supports RSA keys for now.
 sign :: OpenPGP.Message    -- ^ SecretKeys, one of which will be used
