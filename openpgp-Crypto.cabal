@@ -1,6 +1,6 @@
 name:            openpgp-Crypto
-version:         0.5
-cabal-version:   >= 1.8
+version:         0.5.0.1
+cabal-version:   >= 1.10
 license:         OtherLicense
 license-file:    COPYING
 category:        Cryptography
@@ -39,28 +39,36 @@ extra-source-files:
         tests/data/compressedsig-bzip2.gpg
 
 library
+        default-language: Haskell2010
         exposed-modules:
                 Data.OpenPGP.Crypto
 
         build-depends:
-                base == 4.*,
-                bytestring,
-                utf8-string,
-                binary,
-                openpgp <= 0.5,
-                Crypto
+                base        == 4.*,
+                bytestring  >= 0.9 && < 0.11,
+                utf8-string >= 1 && < 1.1,
+                binary      < 0.9,
+                openpgp     == 0.6.*,
+                Crypto      >= 4.2.5.1 && < 4.3
 
 test-suite tests
+        default-language: Haskell2010
         type:       exitcode-stdio-1.0
-        main-is:    tests/suite.hs
+        main-is:    suite.hs
+        hs-source-dirs: tests
 
         build-depends:
-                base == 4.*,
+                -- internal lib dependency
+                openpgp-Crypto,
+                -- constraints inherited via lib:openpgp-Crypto component
+                base,
                 bytestring,
                 utf8-string,
                 binary,
-                openpgp <= 0.5,
-                Crypto,
+                openpgp
+
+        build-depends:
+                -- deps w/o non-inherited version constraints
                 HUnit,
                 QuickCheck >= 2.4.1.1,
                 test-framework,
