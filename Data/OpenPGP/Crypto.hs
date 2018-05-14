@@ -79,6 +79,8 @@ emsa_pkcs1_v1_5_encode m emLen algo =
 	where t = emsa_pkcs1_v1_5_hash_padding algo ++ hash algo m
 
 -- | Verify a message signature.  Only supports RSA keys for now.
+--   This function is partial on messages that contain signatures other than
+--   on literal data.
 verify :: OpenPGP.Message    -- ^ Keys that may have made the signature
           -> OpenPGP.Message -- ^ LiteralData message to verify
           -> Int             -- ^ Index of signature to verify (0th, 1st, etc)
@@ -94,8 +96,10 @@ verify keys message sigidx =
 	Just k = find_key keys issuer
 	Just issuer = OpenPGP.signature_issuer sig
 	sig = sigs !! sigidx
-	(sigs, (OpenPGP.LiteralDataPacket {OpenPGP.content = dta}):_) =
-		OpenPGP.signatures_and_data message
+	(OpenPGP.DataSignature {
+			OpenPGP.literal = OpenPGP.LiteralDataPacket {OpenPGP.content = dta},
+			OpenPGP.signatures_over = sigs
+		}:_) = OpenPGP.signatures message
 
 -- | Sign data or key/userID pair.  Only supports RSA keys for now.
 sign :: OpenPGP.Message    -- ^ SecretKeys, one of which will be used

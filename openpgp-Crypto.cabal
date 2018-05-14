@@ -1,5 +1,5 @@
 name:            openpgp-Crypto
-version:         0.5
+version:         0.6
 cabal-version:   >= 1.8
 license:         OtherLicense
 license-file:    COPYING
@@ -47,7 +47,7 @@ library
                 bytestring,
                 utf8-string,
                 binary,
-                openpgp <= 0.5,
+                openpgp == 0.6.*,
                 Crypto
 
 test-suite tests
@@ -59,7 +59,7 @@ test-suite tests
                 bytestring,
                 utf8-string,
                 binary,
-                openpgp <= 0.5,
+                openpgp == 0.6.*,
                 Crypto,
                 HUnit,
                 QuickCheck >= 2.4.1.1,

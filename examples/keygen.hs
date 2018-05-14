@@ -25,13 +25,10 @@ main = do
 			('d', rsaD nkey), ('p', rsaP nkey), ('q', rsaQ nkey),
 			('u', fst $ extEuclGcd (rsaP nkey) (rsaQ nkey))],
 		OpenPGP.s2k_useage = 0,
-		OpenPGP.symmetric_type = undefined,
-		OpenPGP.s2k_type = undefined,
-		OpenPGP.s2k_hash_algorithm = undefined,
-		OpenPGP.s2k_salt = undefined,
-		OpenPGP.s2k_count = undefined,
+		OpenPGP.symmetric_algorithm = undefined,
+		OpenPGP.s2k = undefined,
 		OpenPGP.encrypted_data = undefined,
-		OpenPGP.private_hash = undefined }
+		OpenPGP.is_subkey = False }
 
 	let userID = OpenPGP.UserIDPacket "Test <test@example.com>"
 	let message = OpenPGP.Message[ secretKey, userID ]
