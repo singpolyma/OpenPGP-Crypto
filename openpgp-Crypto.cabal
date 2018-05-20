@@ -39,6 +39,7 @@ extra-source-files:
         tests/data/compressedsig-bzip2.gpg
 
 library
+        ghc-options: -fno-warn-tabs
         exposed-modules:
                 Data.OpenPGP.Crypto
 
@@ -53,6 +54,7 @@ library
 test-suite tests
         type:       exitcode-stdio-1.0
         main-is:    tests/suite.hs
+        ghc-options: -fno-warn-tabs
 
         build-depends:
                 base == 4.*,
